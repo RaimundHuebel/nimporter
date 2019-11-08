@@ -1,6 +1,6 @@
 # Nimporter
 
-[![nimble](https://raw.githubusercontent.com/yglukhov/nimble-tag/master/nimble_js.svg)](https://github.com/yglukhov/nimble-tag)
+[![nimble](https://raw.githubusercontent.com/yglukhov/nimble-tag/master/nimble_js.png)](https://github.com/yglukhov/nimble-tag)
 
 
 ## Introduction

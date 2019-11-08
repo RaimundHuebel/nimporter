@@ -5,7 +5,7 @@
 # ----------
 #     $ nimble test
 #
-# :Author:   Raimund Hübel <raimund.huebel@googlemail.com>
+# :Author: Raimund Hübel <raimund.huebel@googlemail.com>
 ###
 
 import nimporter
