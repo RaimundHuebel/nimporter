@@ -9,3 +9,5 @@
 ###
 
 import nimporter
+
+import_files "*_test.nim"
