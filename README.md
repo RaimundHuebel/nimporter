@@ -32,7 +32,9 @@ Use Nimporter
    ```nim
    import nimporter
 
-   import_files "test/*_test.nim"
+   import_files "./test/*_test.nim"
+
+   const SAMPLE_CONFIG_JSON_STR = import_data_file( "./test/sample_config.json" )
    ```
 
 
