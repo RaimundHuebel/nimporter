@@ -1,0 +1,1 @@
+Samplefile: fixtures/dir_00/test02.txt
