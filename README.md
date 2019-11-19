@@ -52,7 +52,7 @@ user to add static content to the nim-output at build time.
    ```nim
    import nimporter
 
-   const SAMPLE_FIXTURE_FS: ImportFs = import "test/fixtures/"
+   const SAMPLE_FIXTURE_FS: ImportFs = import_data_directory "test/fixtures/"
 
    let logoData: string  = SAMPLE_FIXTURE_FS.readFile("/logo.png")
 

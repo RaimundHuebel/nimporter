@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.0"
+version       = "1.0.0"
 author        = "Raimund Hübel"
 description   = "A library to provide extended capabilities to import files (not only nim files)."
 license       = "MIT"
