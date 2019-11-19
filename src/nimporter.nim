@@ -21,43 +21,86 @@ import sequtils
 import tables
 import algorithm
 import os
+import nimporter/helper
 
 
 #---------------------------------------------------------------------------------------------------
 # Nim-Src-File-Import using with recursive directory travel ...
 #---------------------------------------------------------------------------------------------------
 
-
 macro import_source_files_impl(
-    file_glob: static[string],
-    importing_file_path: static[string]
+    fileGlob: static[string],
+    importingFilePath: static[string]
 ): untyped =
     ## Helper um Dateien relativ zu den Aufrufer Verzeichnis referenzieren zu können.
     ## Der Zwischenweg über ein template ist wichtig, da für den import das Verzeichnis des Aufrufers
     ## wichtig ist, dieser aber nur bei templates richtig zu funktionieren scheint.
-    let importing_file_directory = importing_file_path.parentDir()
-    echo "[IMPORT FILES] import files using '", file_glob, "' in '", importing_file_directory, "'"
-    let scannedFilePaths: seq[string] = (
-        staticExec( "cd '" & importing_file_directory & "'; find . -type f -wholename '" & file_glob & "'")
-        .split("\n")
-        .filter( proc(x: string): bool = x.len > 0 )
+
+    ## Hier muss erstmal der FileGlob auseinander genommen werden um das endgültige Verzeichnis anzusteuern.
+    var isImportPathPart = true
+    var isRecursive      = false
+    var importPathPart = importingFilePath.parentDir().split("/")
+    var fileGlobPart   = newSeq[string]()
+    for fileGlobItem in fileGlob.split("/"):
+        if fileGlobItem == "" :
+            continue
+        if fileGlobItem == ".":
+            continue
+        echo fileGlobItem
+        if fileGlobItem == "**":
+            isImportPathPart = false;
+            isRecursive      = true
+            continue
+        if fileGlobItem.contains("*"):
+            isImportPathPart = false;
+        if isImportPathPart:
+            importPathPart.add(fileGlobItem)
+        elif not isImportPathPart:
+            fileGlobPart.add(fileGlobItem)
+    let importingFileDirectory: string = importPathPart.join("/")
+    var importingFileGlob:       string = fileGlobPart.join("/")
+
+    echo "[IMPORT SOURCE FILES] import files using '", importingFileGlob, "' in '", importingFileDirectory, "'"
+
+    var scannedFilePaths: seq[string] = @[]
+    if isRecursive == false:
+        for scannedFilePath in walkDir(
+            importingFileDirectory,
+            relative = true
+        ):
+            if scannedFilePath.kind == pcFile:
+                scannedFilePaths.add(scannedFilePath.path)
+    elif isRecursive == true:
+        for scannedFilePath in walkDirRec(
+            importingFileDirectory,
+            yieldFilter  = {pcFile},
+            followFilter = {pcDir},
+            relative     = true
+        ):
+            scannedFilePaths.add(scannedFilePath)
+    scannedFilePaths.sort()
+    scannedFilePaths = scannedFilePaths.filter(
+        proc (relativeFilePath: string): bool =
+            echo relativeFilePath
+            return  staticGlobMatch(relativeFilePath, importingFileGlob)
     )
+
     result = newStmtList()
     for scannedFilePath in scannedFilePaths:
-        #echo "[IMPORT FILES] import '", scannedFilePath, "'"
-        let importFilePath: string = importing_file_directory.joinPath(scannedFilePath)
-        echo "[IMPORT FILES] import '", importFilePath, "'"
+        let importFilePath: string = importingFileDirectory.joinPath(scannedFilePath)
+        echo "[IMPORT SOURCE FILES] import '", importFilePath, "'"
         result.add(
             quote do:
                 import `importFilePath`
         )
-    echo "[IMPORT FILES] ", scannedFilePaths.len, " files imported"
+    echo "[IMPORT SOURCE FILES] ", scannedFilePaths.len, " files imported"
     return result
 
 
+
+
 template import_source_files*(
-    file_glob: static[string],
-    max_depth: static[Natural] = 0
+    fileGlob: string
 ): untyped =
     ## Import the files addressed by the given file glob which is relative to the nim file
     ## that uses import_source_files.
@@ -70,7 +113,7 @@ template import_source_files*(
     # see: https://nim-lang.org/docs/tut3.html
     # see: https://nim-lang.org/docs/macros.html
     # see: https://nim-lang.org/blog/2018/06/07/create-a-simple-macro.html
-    import_source_files_impl( file_glob, instantiationInfo(0, true).filename )
+    import_source_files_impl( fileGlob, instantiationInfo(0, true).filename )
 
 
 
@@ -208,7 +251,9 @@ proc fsItemSize*(self: ImportFs, fileOrDirPath: string): int {.raises: [IOError]
 
 proc listAllFiles*(self: ImportFs): seq[string] {.noSideEffect.} =
     ## Returns all Filepaths which are included into the current ImportFs.
-    result = toSeq(self.fileEntries.keys)
+    result = @[]
+    for fileEntryName in self.fileEntries.keys:
+        result.add( fileEntryName )
     result.sort()
     return result
 
