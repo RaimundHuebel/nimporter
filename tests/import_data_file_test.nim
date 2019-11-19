@@ -1,5 +1,5 @@
 ###
-# Test for Nimporters import_files - Macro.
+# Test for Nimporters import_data_file - Macro.
 #
 # Run Tests:
 #   $ nim compile --run tests/import_data_file_test.nim

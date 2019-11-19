@@ -21,20 +21,42 @@ user to add static content to the nim-output at build time.
 
 ## Get Started
 
-Install Nimporter
+### Install Nimporter
 
    ```bash
    nimble install nimporter
    ```
 
-Use Nimporter
+### Use Nimporter
+
+#### Sample: Import Source-Files by Glob
 
    ```nim
    import nimporter
 
-   import_files "./test/*_test.nim"
+   import_source_files "./test/*_test.nim"
+   ```
 
-   const SAMPLE_CONFIG_JSON_STR = import_data_file( "./test/sample_config.json" )
+#### Sample: Import a single Data-File
+
+   ```nim
+   import nimporter
+
+   const SAMPLE_CONFIG_JSON_STR: string = import_data_file "./test/sample_config.json"
+
+   let configJson = SAMPLE_CONFIG_JSON_STR.parseJson()
+   ```
+
+#### Sample: Import a Data-Directory with multiple files ...
+
+   ```nim
+   import nimporter
+
+   const SAMPLE_FIXTURE_FS: ImportFs = import "test/fixtures/"
+
+   let logoData: string  = SAMPLE_FIXTURE_FS.readFile("/logo.png")
+
+   let configJson: JsonNode = SAMPLE_FIXTURE_FS.readFile("/dir_00/sample_config.json").parseJson()
    ```
 
 

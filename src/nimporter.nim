@@ -6,8 +6,8 @@
 #
 #     import nimporter
 #
-#     import_files "test/*_test.nim"
-#     import_files "test/*_test2.nim"
+#     import_source_files "test/*_test.nim"
+#     import_source_files "test/*_test2.nim"
 #
 # :Author:   Raimund Hübel <raimund.huebel@googlemail.com>
 #
@@ -28,7 +28,7 @@ import os
 #---------------------------------------------------------------------------------------------------
 
 
-macro import_files_impl(
+macro import_source_files_impl(
     file_glob: static[string],
     importing_file_path: static[string]
 ): untyped =
@@ -55,14 +55,14 @@ macro import_files_impl(
     return result
 
 
-template import_files*(
+template import_source_files*(
     file_glob: static[string],
     max_depth: static[Natural] = 0
 ): untyped =
     ## Import the files addressed by the given file glob which is relative to the nim file
-    ## that uses import_files.
+    ## that uses import_source_files.
     ## example:
-    ##   import_files "./test/*_test.nim"
+    ##   import_source_files "./test/*_test.nim"
     ##   -> expands to
     ##   import ./test/sample00_test.nim
     ##   import ./test/sample01_test.nim
@@ -70,7 +70,7 @@ template import_files*(
     # see: https://nim-lang.org/docs/tut3.html
     # see: https://nim-lang.org/docs/macros.html
     # see: https://nim-lang.org/blog/2018/06/07/create-a-simple-macro.html
-    import_files_impl( file_glob, instantiationInfo(0, true).filename )
+    import_source_files_impl( file_glob, instantiationInfo(0, true).filename )
 
 
 

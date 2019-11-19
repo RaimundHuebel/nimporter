@@ -10,4 +10,4 @@
 
 import nimporter
 
-import_files "*_test.nim"
+import_source_files "*_test.nim"

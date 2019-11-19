@@ -1,5 +1,5 @@
 ###
-# Test for Nimporters import_files - Macro.
+# Test for Nimporters import_source_files - Macro.
 #
 # Run Tests:
 #   $ nim compile --run tests/import_data_file_test.nim
@@ -38,12 +38,12 @@ suite "nimporter.import_data_directory":
         check true == FIXTURE_FS.isExistingFile("/data_file_02.adoc")
         check true == FIXTURE_FS.isExistingFile("/data_file_03.json")
 
-        check true == FIXTURE_FS.isExistingFile("/import_files_00_a.nim")
-        check true == FIXTURE_FS.isExistingFile("/import_files_00_b.nim")
-        check true == FIXTURE_FS.isExistingFile("/import_files_00_c.nim")
-        check true == FIXTURE_FS.isExistingFile("/import_files_01_a.nim")
-        check true == FIXTURE_FS.isExistingFile("/import_files_01_b.nim")
-        check true == FIXTURE_FS.isExistingFile("/import_files_01_c.nim")
+        check true == FIXTURE_FS.isExistingFile("/source_file_00_a.nim")
+        check true == FIXTURE_FS.isExistingFile("/source_file_00_b.nim")
+        check true == FIXTURE_FS.isExistingFile("/source_file_00_c.nim")
+        check true == FIXTURE_FS.isExistingFile("/source_file_01_a.nim")
+        check true == FIXTURE_FS.isExistingFile("/source_file_01_b.nim")
+        check true == FIXTURE_FS.isExistingFile("/source_file_01_c.nim")
 
         check true == FIXTURE_FS.isExistingFile("/dir_00/lorem_ipsum.txt")
         check true == FIXTURE_FS.isExistingFile("/dir_00/nim_lang.md")
@@ -101,7 +101,7 @@ suite "nimporter.import_data_directory":
 
     test "#isExisting() with existing files":
         check true == FIXTURE_FS.isExistingFile("/data_file_00.txt")
-        check true == FIXTURE_FS.isExistingFile("/import_files_00_a.nim")
+        check true == FIXTURE_FS.isExistingFile("/source_file_00_a.nim")
         check true == FIXTURE_FS.isExistingFile("/dir_00/lorem_ipsum.txt")
         check true == FIXTURE_FS.isExistingFile("/dir_01/test00.txt")
 
@@ -111,7 +111,7 @@ suite "nimporter.import_data_directory":
         check false == FIXTURE_FS.isExisting("/dir_01//")
 
         check false == FIXTURE_FS.isExistingFile("/data_file_00.txt/")
-        check false == FIXTURE_FS.isExistingFile("/import_files_00_a.nim/")
+        check false == FIXTURE_FS.isExistingFile("/source_file_00_a.nim/")
         check false == FIXTURE_FS.isExistingFile("/dir_00/lorem_ipsum.txt/")
         check false == FIXTURE_FS.isExistingFile("/dir_01/test00.txt/")
 
@@ -146,12 +146,12 @@ suite "nimporter.import_data_directory":
             "/dir_01/test00.txt",
             "/dir_01/test01.txt",
             "/dir_01/test02.txt",
-            "/import_files_00_a.nim",
-            "/import_files_00_b.nim",
-            "/import_files_00_c.nim",
-            "/import_files_01_a.nim",
-            "/import_files_01_b.nim",
-            "/import_files_01_c.nim",
+            "/source_file_00_a.nim",
+            "/source_file_00_b.nim",
+            "/source_file_00_c.nim",
+            "/source_file_01_a.nim",
+            "/source_file_01_b.nim",
+            "/source_file_01_c.nim",
         ]
 
 
@@ -210,7 +210,7 @@ suite "nimporter.import_data_directory":
 
 
     test "#dirSize(): with existing dir 00":
-        check FIXTURE_FS.dirSize("/") == 14864
+        check FIXTURE_FS.dirSize("/") == 14894
 
     test "#dirSize(): with existing dir 01":
         check FIXTURE_FS.dirSize("/dir_00") == 1384
@@ -245,7 +245,7 @@ suite "nimporter.import_data_directory":
 
 
     test "#fsItemSize(): with existing dir 00":
-        check FIXTURE_FS.fsItemSize("/") == 14864
+        check FIXTURE_FS.fsItemSize("/") == 14894
 
     test "#fsItemSize(): with existing dir 01":
         check FIXTURE_FS.fsItemSize("/dir_00") == 1384
@@ -283,12 +283,12 @@ suite "nimporter.import_data_directory":
             "/data_file_01.md",
             "/data_file_02.adoc",
             "/data_file_03.json",
-            "/import_files_00_a.nim",
-            "/import_files_00_b.nim",
-            "/import_files_00_c.nim",
-            "/import_files_01_a.nim",
-            "/import_files_01_b.nim",
-            "/import_files_01_c.nim",
+            "/source_file_00_a.nim",
+            "/source_file_00_b.nim",
+            "/source_file_00_c.nim",
+            "/source_file_01_a.nim",
+            "/source_file_01_b.nim",
+            "/source_file_01_c.nim",
         ]
 
     test "#listDir(): with valid filepath 01":
