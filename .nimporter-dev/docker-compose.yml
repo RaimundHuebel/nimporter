@@ -1,0 +1,53 @@
+###
+# DockerCompose-File for Nimporter-Dev-System in a composed Docker-Environment.
+#
+#
+# @example Usage
+# ```bash
+#    cd docker  # == this-folder
+#
+#    # Build Nimporter-Dev Dockerimage ...
+#    $ docker-compose build nimporter-dev
+#
+#    # Run and start Nimporter Dev-Console ...
+#    $ docker-compose run --rm -w '/home/dev/nimporter' nimporter-dev console
+#
+#    # Run Test with Nimporter-Dev ...
+#    $ docker-compose run --rm  -w '/home/dev/nimporter' nimporter-dev nimble test; echo $?
+#
+#    # Build Test-Dist with Nimporter-Dev...
+#    $ docker-compose run --rm  -w '/home/dev/nimporter' nimporter-dev nim compile -d:release --opt:speed --out:dist/nimporter_tests tests/test_all; echo $?
+# ```
+# @see https://docs.docker.com/compose/compose-file/
+# @see https://docs.docker.com/compose/compose-file/compose-file-v2/
+#
+# @author Raimund Hübel <raimund.huebel@hagedorn-software.de>
+###
+
+version: "2.4"
+
+services:
+
+  nimporter-dev:
+    image: nimporter-dev:1.0
+    build:
+      context:    ./
+      dockerfile: ./Dockerfile
+    command: [ "console" ]
+    volumes:
+      - ..:/home/dev/nimporter
+      #DEPRECATED - nim-cache-volume:/home/dev/.cache
+    tmpfs:
+      - /tmp
+      - /home/dev/.cache
+
+
+#DEPRECATED ##
+#DEPRECATED # Internal Volumes for Services-Composition
+#DEPRECATED # @see https://docs.docker.com/storage/
+#DEPRECATED # @see https://docs.docker.com/storage/volumes/
+#DEPRECATED # @see https://docs.docker.com/compose/compose-file/compose-file-v2/#volume-configuration-reference
+#DEPRECATED # @see https://docs.docker.com/compose/compose-file/compose-file-v2/#volumes
+#DEPRECATED volumes:
+#DEPRECATED   nim-cache-volume:
+#DEPRECATED     external: false

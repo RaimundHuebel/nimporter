@@ -1,0 +1,9 @@
+# Dockerignore-File for Nimporter
+/src/
+/tests/
+/README.md
+/.dockerignore
+/.gitignore
+/.fs_watcher.conf
+/nim.cfg
+/nimporter.nimble

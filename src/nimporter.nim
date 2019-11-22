@@ -46,7 +46,7 @@ macro import_source_files_impl(
             continue
         if fileGlobItem == ".":
             continue
-        echo fileGlobItem
+        #echo fileGlobItem
         if fileGlobItem == "**":
             isImportPathPart = false;
             isRecursive      = true
