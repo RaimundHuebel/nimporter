@@ -62,12 +62,17 @@ user to add static content to the nim-output at build time.
 
 ## Develop
 
-### Running Tests
+### Running Tests (on local machine)
 
    ```bash
    nimble test
    ```
 
+### Running Tests (using dev-environment provided throug docker)
+
+   ```bash
+   ./nimporter-dev.sh nimble test
+   ```
 
 
 ## Links

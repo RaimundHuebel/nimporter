@@ -1,0 +1,34 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Show Workspace
+      run: ls -l
+    - name: Show Docker-Version
+      run: |
+        docker --version
+        docker-compose --version
+    - name: Prepare and check nimporter/dev-system Docker-Environment ...
+      run: |
+        ./nimporter-dev.sh nim --version
+        ./nimporter-dev.sh nimble --version
+    ## Following Steps are not working, because github-actions-workspace seems to be readonly
+    #- name: Run direkt tests
+    #  run:  ./nimporter-dev.sh make clean test
+    #- name: Build debug and release tests (using nimble)...
+    #  run:  ./nimporter-dev.sh make build
+    #- name: Run tests (debug)
+    #  run:  ./dist/debug/nimporter_tests
+    #- name: Run tests (release)
+    #  run:  ./dist/release/nimporter_tests
+    - name: Run tests (debug, using nim compile) ...
+      run:  ./nimporter-dev.sh nim compile --out:../nimporter_dist/debug/nimporter_tests --run tests/test_all.nim
+    - name: Run tests (release, using nim compile) ...
+      run:  ./nimporter-dev.sh nim compile --out:../nimporter_dist/release/nimporter_tests -d:release --opt:speed --run tests/test_all.nim

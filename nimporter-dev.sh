@@ -49,10 +49,20 @@ if [ ! "0" -eq "$COUNT_BUILD_SYSTEM_CONTAINER" ]; then
   docker rm nimporter-dev-system-v1-run
 fi
 
+# Check if Interactive Terminal is available, and set corresponding docker-flag ...
+if [ -t 0 ]; then
+    echo "[INFO] Docker is running WITH interactive Terminal"
+    DOCKER_RUN_INTERACTIVE_TERMINAL_FLAG=-i
+else
+    echo "[INFO] Docker is running WITHOUT interactive Terminal"
+    DOCKER_RUN_INTERACTIVE_TERMINAL_FLAG=
+fi
+
 echo "[EXEC] execute in docker: $@"
 exec docker run \
+       $DOCKER_RUN_INTERACTIVE_TERMINAL_FLAG \
+       -t --rm \
        --name 'nimporter-dev-system-v1-run' \
-       -it --rm \
        --mount type=tmpfs,destination=/tmp \
        --mount type=tmpfs,destination=/home/dev/.cache \
        --mount type=tmpfs,destination=/home/dev/.nimble \
