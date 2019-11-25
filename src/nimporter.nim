@@ -1,18 +1,22 @@
-###
-# Nimporter is a library to extend Nim Lang with extended import capabilities.
-#
-# Example usage:
-# --------------
-#
-#     import nimporter
-#
-#     import_source_files "test/*_test.nim"
-#     import_source_files "test/*_test2.nim"
-#
-# :Author:   Raimund Hübel <raimund.huebel@googlemail.com>
-#
-# :See: https://hookrace.net/blog/introduction-to-metaprogramming-in-nim/
-###
+## Nimporter is a library to extend Nim Lang with extended import capabilities.
+##
+## **Example usage**::
+##
+##     import nimporter
+##
+##     # Import sources by glob relative zu current source dir ...
+##     import_source_files "test/*_test.nim"
+##     import_source_files "test/*_test2.nim"
+##
+##     # Embed data-file relative zu current source dir ...
+##     const DEFAULT_CONFIG_JSON: string = import_data_file "test/config.json"
+##
+##     # Embed data-directory relative zu current source dir ...
+##     const SAMPLE_FS_00: ImportFs  = import_data_directory "test/fixtures"
+##
+## :Author:   Raimund Hübel <raimund.huebel@googlemail.com>
+##
+## :See: https://hookrace.net/blog/introduction-to-metaprogramming-in-nim/
 
 
 import macros
@@ -36,7 +40,7 @@ macro import_source_files_impl(
     ## Der Zwischenweg über ein template ist wichtig, da für den import das Verzeichnis des Aufrufers
     ## wichtig ist, dieser aber nur bei templates richtig zu funktionieren scheint.
 
-    ## Hier muss erstmal der FileGlob auseinander genommen werden um das endgültige Verzeichnis anzusteuern.
+    # Hier muss erstmal der FileGlob auseinander genommen werden um das endgültige Verzeichnis anzusteuern.
     var isImportPathPart = true
     var isRecursive      = false
     var importPathPart = importingFilePath.parentDir().split("/")
@@ -104,12 +108,13 @@ template import_source_files*(
 ): untyped =
     ## Import the files addressed by the given file glob which is relative to the nim file
     ## that uses import_source_files.
-    ## example:
-    ##   import_source_files "./test/*_test.nim"
-    ##   -> expands to
-    ##   import ./test/sample00_test.nim
-    ##   import ./test/sample01_test.nim
-    ##   import ./test/dir/sample02_test.nim
+    ##
+    ## **Example**::
+    ##     import_source_files "./test/*_test.nim"
+    ##     -> expands to
+    ##     import ./test/sample00_test.nim
+    ##     import ./test/sample01_test.nim
+    ##     import ./test/dir/sample02_test.nim
     # see: https://nim-lang.org/docs/tut3.html
     # see: https://nim-lang.org/docs/macros.html
     # see: https://nim-lang.org/blog/2018/06/07/create-a-simple-macro.html
@@ -139,7 +144,8 @@ proc import_data_file_impl(
 template import_data_file*( filePath: string ): string =
     ## Import the content of the given fileName wich is relative to the nim_file
     ## that uses import_data_file.
-    ## example:
+    ##
+    ## **Example**::
     ##   const SAMPLE_LOGO_JPG    : string = import_data_file "./test/sample.jpg"
     ##   const DEFAULT_CONFIG_JSON: string = import_data_file "./test/config.json"
     import_data_file_impl( filePath, instantiationInfo(0, true).filename )
@@ -152,7 +158,7 @@ template import_data_file*( filePath: string ): string =
 
 
 type ImportFs* = object
-    ## Type which gets returned by
+    ## Type which gets returned by import_data_directory. And provides access to the embedded directory-files.
     fileEntries: Table[string, string]
 
 proc normalizeDirPath(dirPath: string): string {.raises: [IOError].}
@@ -310,7 +316,8 @@ proc import_data_directory_impl(
 template import_data_directory*( dirPath: string ): ImportFs =
     ## Import the contents of the given directory wich is relative to the nim_file
     ## that uses import_data_directory.
-    ## example:
+    ##
+    ## **Example**::
     ##   const SAMPLE_FS_00: ImportFs  = import_data_directory "test/fixtures"
     ##   const SAMPLE_FS_01: ImportFs  = import_data_directory "test/fixtures/"
     import_data_directory_impl( dirPath, instantiationInfo(0, true).filename )

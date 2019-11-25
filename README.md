@@ -5,7 +5,7 @@
 
 ## Introduction
 
-This library extends the nim programming language of further ways to import other nim-files.
+Library to extend the nim programming language of further ways to import source-files.
 It also enables you to import single data files or whole directory structures, enabling the
 user to add static content to the nim-output at build time.
 
@@ -18,13 +18,12 @@ user to add static content to the nim-output at build time.
   to provide a single file deployment.
 
 
-
 ## Get Started
 
 ### Install Nimporter
 
    ```bash
-   nimble install nimporter
+   $ nimble install nimporter
    ```
 
 ### Use Nimporter
@@ -65,15 +64,29 @@ user to add static content to the nim-output at build time.
 ### Running Tests (on local machine)
 
    ```bash
-   nimble test
+   $ nimble test
    ```
 
-### Running Tests (using dev-environment provided throug docker)
+### Running Tests (using dev-environment provided through docker)
 
    ```bash
-   ./nimporter-dev.sh nimble test
-   ```
+   # Using nimble
+   $ ./nimporter-dev.sh nimble test
 
+   # Using make (direkt test)
+   $ ./nimporter-dev.sh make test
+
+   # Using make (build & run tests)
+   $ ./nimporter-dev.sh make build
+   $ dist/debug/nimporter_tests
+   $ dist/release/nimporter_tests
+
+   # Using nim (debug build)
+   $ ./nimporter-dev.sh nim compile --out:dist/debug/nimporter_tests --run tests/test_all.nim
+
+   # Using nim (release build)
+   $ ./nimporter-dev.sh nim compile --out:dist/release/nimporter_tests -d:release --opt:speed --run tests/test_all.nim
+   ```
 
 ## Links
 

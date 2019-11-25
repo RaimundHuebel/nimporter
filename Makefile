@@ -31,6 +31,7 @@ help:
 	@echo "  make build          -  Build release and debug dists"
 	@echo "  make build/release  -  Build release dist"
 	@echo "  make build/debug    -  Build debug dist"
+	@echo "  make build/doc      -  Build documentation"
 	@echo
 	@echo "  make test           -  Executes Test of nimporter"
 	@echo
@@ -55,7 +56,7 @@ test:
 #---------------------------------------------------------------------------------------------------
 
 .PHONY: build
-build: build/debug build/release
+build: build/debug build/release build/doc
 
 
 .PHONY: build/debug dist/debug/nimporter_tests
@@ -74,6 +75,11 @@ dist/release/nimporter_tests:
 	-upx --best dist/release/nimporter_tests
 	-ls -l dist/release/nimporter_tests
 
+
+.PHONY: build/doc build/doc/nimporter.html
+build/doc: dist/doc/nimporter.html
+dist/doc/nimporter.html:
+	nim doc --out:dist/doc/nimporter.html src/nimporter.nim
 
 
 #---------------------------------------------------------------------------------------------------
